@@ -1,0 +1,31 @@
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: var(--tg-theme-text-color, #1a1a1a);
+  background: var(--tg-theme-bg-color, #ffffff);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.app h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.greeting {
+  margin-top: 1rem;
+  color: var(--tg-theme-hint-color, #666);
+}
