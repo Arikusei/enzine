@@ -1,17 +1,25 @@
 # База данных
 
-PostgreSQL-схема для Enzine.
+PostgreSQL: миграции и сиды для Enzine.
 
-## Применение схемы
+## Структура
+
+```
+database/
+├── migrations/   # SQL-миграции (порядок по имени файла)
+└── seeds/        # Начальные данные
+```
+
+## Применение
 
 ```bash
-psql $DATABASE_URL -f database/schema.sql
+# Миграции
+psql $DATABASE_URL -f database/migrations/001_init.sql
+
+# Сиды
+psql $DATABASE_URL -f database/seeds/001_users.sql
 ```
 
 ## Переменные окружения
 
-См. `.env.example` — параметр `DATABASE_URL`.
-
-## Миграции
-
-На текущем этапе используется единый файл `schema.sql`. По мере роста проекта рекомендуется подключить инструмент миграций (например, Drizzle или Prisma).
+`DATABASE_URL` — см. `.env.example` в корне репозитория.

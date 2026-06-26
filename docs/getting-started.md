@@ -1,47 +1,42 @@
 # Быстрый старт
 
-## 1. Клонирование и установка
+## 1. Установка
 
 ```bash
 git clone https://github.com/Arikusei/enzine.git
 cd enzine
-pnpm install
+npm install
 ```
 
-## 2. Настройка окружения
+## 2. Окружение
 
 ```bash
 cp .env.example .env
 ```
 
-Заполните `BOT_TOKEN` — токен от [@BotFather](https://t.me/BotFather).
+| Переменная | Обязательна для bot | Описание |
+|------------|---------------------|----------|
+| `BOT_TOKEN` | да | Токен от [@BotFather](https://t.me/BotFather) |
+| `NEXT_PUBLIC_API_URL` | нет | URL API для Mini App |
+| `DATABASE_URL` | нет | PostgreSQL connection string |
 
-## 3. Запуск бота
-
-```bash
-pnpm dev:bot
-```
-
-Откройте бота в Telegram и отправьте `/start`.
-
-## 4. Запуск Mini App
+## 3. Запуск
 
 ```bash
-pnpm dev:miniapp
+# Bot (требует BOT_TOKEN)
+npm run dev:bot
+
+# Mini App → http://localhost:3001
+npm run dev:miniapp
 ```
 
-Для тестирования в Telegram настройте Mini App URL в BotFather (требуется HTTPS; для локальной разработки используйте ngrok или аналог).
-
-## 5. База данных (опционально)
+## 4. TypeScript
 
 ```bash
-# Создайте БД и примените схему
-createdb enzine
-psql $DATABASE_URL -f database/schema.sql
+npm run typecheck
 ```
 
-## Полезные ссылки
+## Ссылки
 
-- [grammY документация](https://grammy.dev/)
-- [Telegram Mini Apps](https://core.telegram.org/bots/webapps)
 - [Архитектура](architecture.md)
+- [Сценарии](scenarios.md)

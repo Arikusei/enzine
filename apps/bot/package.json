@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@enzine/shared": "workspace:*",
-    "grammy": "^1.35.0",
-    "dotenv": "^16.4.7"
+    "@enzine/shared": "*",
+    "dotenv": "^16.4.7",
+    "grammy": "^1.35.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",

@@ -3,11 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "description": "Monorepo for Telegram Bot, Mini App, shared types and database",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev:bot": "pnpm --filter @enzine/bot dev",
-    "dev:miniapp": "pnpm --filter @enzine/miniapp dev",
-    "build": "pnpm -r build",
-    "typecheck": "pnpm -r typecheck"
+    "dev:bot": "npm run dev -w @enzine/bot",
+    "dev:miniapp": "npm run dev -w @enzine/miniapp",
+    "build": "npm run build -w @enzine/shared && npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "postinstall": "npm run build -w @enzine/shared"
   },
   "engines": {
     "node": ">=20"

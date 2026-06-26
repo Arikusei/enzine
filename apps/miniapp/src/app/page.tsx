@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import type { User } from "@enzine/shared";
+"use client";
 
-export function App() {
+import { useEffect, useState } from "react";
+import { formatUserName, type User } from "@enzine/shared";
+
+export default function HomePage() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -11,26 +13,25 @@ export function App() {
     tg.ready();
     tg.expand();
 
-    const initData = tg.initDataUnsafe?.user;
-    if (initData) {
+    const initUser = tg.initDataUnsafe?.user;
+    if (initUser) {
       setUser({
-        telegramId: initData.id,
-        username: initData.username,
-        firstName: initData.first_name,
-        lastName: initData.last_name,
+        telegramId: initUser.id,
+        username: initUser.username,
+        firstName: initUser.first_name,
+        lastName: initUser.last_name,
       });
     }
   }, []);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   return (
-    <main className="app">
+    <main className="page">
       <h1>Enzine</h1>
-      <p>Mini App готов к разработке.</p>
-      {user && (
-        <p className="greeting">
-          Привет, {user.firstName ?? user.username ?? "друг"}!
-        </p>
-      )}
+      <p>Next.js Telegram Mini App готов к разработке.</p>
+      {user && <p className="greeting">Привет, {formatUserName(user)}!</p>}
+      {apiUrl && <p className="hint">API: {apiUrl}</p>}
     </main>
   );
 }

@@ -1,4 +1,4 @@
--- Enzine initial schema
+-- Enzine: initial schema
 -- PostgreSQL 15+
 
 CREATE TABLE IF NOT EXISTS users (
@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
   username    VARCHAR(255),
   first_name  VARCHAR(255),
   last_name   VARCHAR(255),
+  role        VARCHAR(32) NOT NULL DEFAULT 'user',
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -21,6 +22,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS users_updated_at ON users;
 CREATE TRIGGER users_updated_at
   BEFORE UPDATE ON users
   FOR EACH ROW
