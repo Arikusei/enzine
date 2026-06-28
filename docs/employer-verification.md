@@ -24,14 +24,21 @@
 git clone https://github.com/Arikusei/enzine.git
 cd enzine
 npm install
-cp .env.example .env
 ```
 
-Для проверки бота в `.env` задайте:
+**Windows:** `copy .env.example .env`  
+**Linux/macOS:** `cp .env.example .env`
+
+Для проверки бота в `.env` (файл в **корне** репозитория):
 
 ```env
 BOT_TOKEN=<токен от @BotFather>
+BOT_WEBHOOK_URL=
+BOT_WEBHOOK_SECRET=
+NEXT_PUBLIC_BOT_USERNAME=<username бота без @>
 ```
+
+`BOT_WEBHOOK_URL` оставить **пустым** для локального long polling.
 
 Для проверки БД:
 
@@ -45,8 +52,24 @@ DATABASE_URL=postgresql://enzine:enzine@localhost:5432/enzine
 npm run typecheck    # TypeScript без ошибок
 npm run build        # сборка shared + приложений
 npm run dev:miniapp  # → http://localhost:3001
-npm run dev:bot      # long polling (нужен BOT_TOKEN)
+npm run dev:bot      # long polling (нужен BOT_TOKEN в .env)
 ```
+
+**Mini App без установки:** если у кандидата задеплоен Vercel — открыть production URL (секции UI, Header, HeroSlider).
+
+**Bot:** второй терминал, в Telegram `/start` и `/help`.
+
+---
+
+## Экспресс-приёмка для работодателя (~10 мин, без PostgreSQL)
+
+1. Открыть https://github.com/Arikusei/enzine
+2. `git clone` → `npm install` → `npm run typecheck`
+3. `npm run dev:miniapp` → http://localhost:3001 — scroll, Header, HeroSlider, секции
+4. DevTools → Console: клик 🔔 (modal), CTA баннера (log)
+5. `.env` + `npm run dev:bot` → `/start` в Telegram
+6. Документы: `docs/sprint-1-architecture.md`, `docs/employer-verification.md`
+7. *(Опционально)* PostgreSQL: `npm run db:seed:verify`
 
 ---
 
@@ -412,7 +435,8 @@ targetType: "phase"
 
 | Проблема | Решение |
 |----------|---------|
-| `BOT_TOKEN is required` | заполнить `.env`, скопировать из `.env.example` |
+| `BOT_TOKEN is required` | `.env` в **корне** repo; Windows: `copy .env.example .env` |
+| `cp` не найден (Windows) | `copy .env.example .env` |
 | `psql: command not found` | установить PostgreSQL client |
 | Порт 3001 занят | остановить другой процесс или сменить порт в `apps/miniapp/package.json` |
 | Mini App пустой экран | проверить console в DevTools, перезапустить `npm run dev:miniapp` |
