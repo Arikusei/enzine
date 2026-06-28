@@ -57,6 +57,8 @@ Bot и Mini App читают переменные из корневого `.env`
 ## Документация
 
 - [Архитектура](docs/architecture.md)
+- [Sprint 1 Architecture](docs/sprint-1-architecture.md)
+- [Проверка task для работодателя](docs/employer-verification.md)
 - [Сценарии](docs/scenarios.md)
 - [Быстрый старт](docs/getting-started.md)
 - [База данных](database/README.md)
