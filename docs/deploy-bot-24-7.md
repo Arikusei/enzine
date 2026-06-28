@@ -1,110 +1,81 @@
 # Bot 24/7 без домашнего ПК
 
-Бот в облаке работает в **webhook-режиме**: Telegram шлёт updates на HTTPS URL, сервер всегда слушает порт.
+## Fly.io требует карту
 
-Локально (разработка) — **long polling** (`BOT_WEBHOOK_URL` пустой).
+Если видите:
+
+```text
+We need your payment information to continue!
+```
+
+Fly.io **не даст деплоить без привязки карты** (даже на free tier). Это не ошибка вашего проекта.
+
+**Без карты используйте Oracle Cloud (ниже)** или временно запускайте бота на ПК.
 
 ---
 
-## Рекомендуемый вариант: Fly.io (бесплатный tier)
+## Что работает БЕЗ бота 24/7
 
-Нужны: аккаунт [fly.io](https://fly.io), карта (для верификации, списаний нет на free tier в рамках лимита).
+| Функция | Нужен ли bot process |
+|---------|---------------------|
+| Mini App на Vercel | **Нет** — открывается по URL |
+| Menu Button в Telegram | **Нет** — настраивается в BotFather |
+| Команда `/start`, ответы бота | **Да** |
 
-### 1. Установить flyctl
+Mini App уже на Vercel → в BotFather задайте Menu Button на ваш Vercel URL — приложение откроется даже если бот не запущен.
+
+---
+
+## Рекомендуется: Oracle Cloud Always Free (VPS, $0)
+
+Always Free ARM VM — бесплатно **навсегда** (лимиты Oracle). Карта может понадобиться **только для верификации** аккаунта (как у AWS/GCP), списания при соблюдении free tier обычно нет.
+
+### 1. Создать VM
+
+1. [cloud.oracle.com](https://cloud.oracle.com) → регистрация
+2. **Create VM instance**
+3. **Always Free eligible** — shape `VM.Standard.A1.Flex` (ARM), 1 OCPU, 6 GB RAM
+4. Image: **Ubuntu 22.04**
+5. Download SSH key / задайте пароль
+6. **Networking** — публичный IP
+
+### 2. Подключиться по SSH
 
 Windows (PowerShell):
 
 ```powershell
-powershell -Command "iwr https://fly.io/install.ps1 -useb | iex"
+ssh ubuntu@ВАШ_ПУБЛИЧНЫЙ_IP
 ```
 
-### 2. Логин и создание приложения
+### 3. Установить бота (long polling)
+
+На сервере:
 
 ```bash
+git clone https://github.com/Arikusei/enzine.git
 cd enzine
-fly auth login
-fly apps create enzine-bot-ВАШ_НИК
+cp .env.example .env
+nano .env
 ```
 
-Отредактируйте `fly.toml` — поле `app` = имя из предыдущей команды.
-
-### 3. Секреты
-
-Сгенерируйте секрет webhook (любая длинная строка):
-
-```bash
-fly secrets set BOT_TOKEN=7123456789:AAHxxxxxxxx BOT_WEBHOOK_SECRET=случайная_строка_32_символа
-```
-
-### 4. URL webhook
-
-После первого деплоя URL будет `https://ИМЯ_ПРИЛОЖЕНИЯ.fly.dev`.
-
-```bash
-fly secrets set BOT_WEBHOOK_URL=https://enzine-bot-ВАШ_НИК.fly.dev/webhook
-```
-
-### 5. Деплой
-
-```bash
-fly deploy
-```
-
-### 6. Проверка
-
-```bash
-fly logs
-curl https://enzine-bot-ВАШ_НИК.fly.dev/health
-```
-
-В Telegram → `/start` — бот должен ответить.
-
----
-
-## Переменные окружения (production)
-
-| Переменная | Пример | Обязательна |
-|------------|--------|-------------|
-| `BOT_TOKEN` | от BotFather | да |
-| `BOT_WEBHOOK_URL` | `https://app.fly.dev/webhook` | да (облако) |
-| `BOT_WEBHOOK_SECRET` | случайная строка | рекомендуется |
-| `BOT_WEBHOOK_PATH` | `/webhook` | нет (default) |
-| `PORT` | `3000` | Fly выставляет сам |
-
----
-
-## Локальная разработка (ПК)
-
-`.env` в корне репозитория:
+В `.env` **только**:
 
 ```env
-BOT_TOKEN=...
+BOT_TOKEN=ваш_токен_от_BotFather
 BOT_WEBHOOK_URL=
 BOT_WEBHOOK_SECRET=
 ```
 
+Webhook **не нужен** на VPS — работает long polling.
+
 ```bash
-npm run dev:bot
+bash scripts/setup-bot-vps.sh
 ```
 
-→ `Bot started (long polling)`
-
----
-
-## Альтернатива: Oracle Cloud Always Free (VPS)
-
-Подходит и для long polling без webhook.
-
-1. [cloud.oracle.com](https://cloud.oracle.com) → Create VM (Always Free, Ubuntu).
-2. SSH на сервер:
+Или вручную:
 
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs git
-git clone https://github.com/Arikusei/enzine.git
-cd enzine
 npm install
-nano .env   # только BOT_TOKEN, без WEBHOOK_URL
 npm run build -w @enzine/shared
 npm run build -w @enzine/bot
 sudo npm install -g pm2
@@ -113,19 +84,74 @@ pm2 save
 pm2 startup
 ```
 
-Бесплатно 24/7, но настройка сложнее Fly.io.
+### 4. Проверка
+
+```bash
+pm2 logs enzine-bot
+pm2 status
+```
+
+Telegram → `/start` — бот отвечает. ПК можно выключить.
 
 ---
 
-## Что НЕ подходит для бота 24/7
+## Вариант с картой: Fly.io (webhook)
+
+Если карта есть — webhook на Fly.io (см. `fly.toml`, `Dockerfile.bot`):
+
+```bash
+fly auth login
+fly apps create enzine-bot-ВАШ_НИК
+fly secrets set BOT_TOKEN=... BOT_WEBHOOK_SECRET=...
+fly deploy
+fly secrets set BOT_WEBHOOK_URL=https://ВАШ_APP.fly.dev/webhook
+fly deploy
+```
+
+---
+
+## Локально (ПК включён)
+
+`.env`:
+
+```env
+BOT_TOKEN=...
+BOT_WEBHOOK_URL=
+```
+
+```bash
+npm run dev:bot
+```
+
+---
+
+## Переменные окружения
+
+| Переменная | Oracle (polling) | Fly (webhook) |
+|------------|------------------|---------------|
+| `BOT_TOKEN` | да | да |
+| `BOT_WEBHOOK_URL` | **пусто** | `https://.../webhook` |
+| `BOT_WEBHOOK_SECRET` | пусто | рекомендуется |
+
+---
+
+## Что НЕ подходит
 
 | Платформа | Почему |
 |-----------|--------|
-| Vercel | serverless, нет постоянного процесса / long polling |
-| Render Free | засыпает через 15 мин |
-| Домашний ПК выключен | бот offline |
+| **Fly.io без карты** | блокировка billing |
+| **Vercel** | serverless, не для long polling |
+| **Render Free** | засыпает через ~15 мин |
+| **ПК выключен** | polling останавливается |
 
-Mini App — на **Vercel**. Bot — на **Fly.io** или **Oracle VM**.
+---
+
+## Архитектура (бесплатный стек)
+
+```
+Telegram Mini App  ──►  Vercel (уже есть)
+Telegram /start    ──►  Oracle VM + pm2 + long polling
+```
 
 ---
 
@@ -133,19 +159,7 @@ Mini App — на **Vercel**. Bot — на **Fly.io** или **Oracle VM**.
 
 | Проблема | Решение |
 |----------|---------|
-| Бот не отвечает после деплоя | `fly logs`, проверить `BOT_WEBHOOK_URL` и `/health` |
-| 401 / webhook error | неверный `BOT_TOKEN` |
-| Два инстанса polling | в production задайте `BOT_WEBHOOK_URL`, локально webhook URL уберите |
-| `BOT_TOKEN is required` | секрет не задан: `fly secrets set BOT_TOKEN=...` |
-
----
-
-## Архитектура
-
-```
-Telegram ──HTTPS POST──► Fly.io (webhook /webhook)
-                              │
-                              └── grammY bot handlers
-
-Telegram ◄── Mini App ──► Vercel (Next.js)
-```
+| Fly.io payment required | используйте Oracle или ПК |
+| `BOT_TOKEN is required` | `.env` в **корне** repo на сервере |
+| Бот падал после reboot | `pm2 startup` + `pm2 save` |
+| Oracle не даёт A1 shape | попробуйте другой регион (Frankfurt, Amsterdam) |
