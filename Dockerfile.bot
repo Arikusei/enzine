@@ -1,0 +1,31 @@
+# Enzine Bot — production image (webhook mode)
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json .npmrc tsconfig.base.json ./
+COPY packages/shared/package.json packages/shared/tsconfig.json ./packages/shared/
+COPY apps/bot/package.json apps/bot/tsconfig.json ./apps/bot/
+
+COPY packages/shared/src ./packages/shared/src
+COPY apps/bot/src ./apps/bot/src
+
+RUN npm install --include=dev
+RUN npm run build -w @enzine/shared && npm run build -w @enzine/bot
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/package.json /app/package-lock.json /app/.npmrc ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/shared ./packages/shared
+COPY --from=builder /app/apps/bot ./apps/bot
+
+WORKDIR /app/apps/bot
+
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]
