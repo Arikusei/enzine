@@ -25,6 +25,28 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--tg-theme-secondary-bg-color, #f4f4f4);
+  text-align: left;
+}
+
+.card h2,
+.card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card ul {
+  padding-left: 1.25rem;
+}
+
+.card li {
+  margin-bottom: 0.25rem;
+}
+
 .greeting,
 .hint {
   margin-top: 1rem;
