@@ -1,8 +1,9 @@
 import { config } from "dotenv";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 
-config({ path: resolve(__dirname, "../../.env") });
+config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../.env") });
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@enzine/shared"],

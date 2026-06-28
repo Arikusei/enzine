@@ -1,7 +1,8 @@
 import { config } from "dotenv";
-import { resolve } from "node:path";
+import { existsSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const rootDir = resolve(fileURLToPath(import.meta.url), "../../..");
+const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 
 config({ path: resolve(rootDir, ".env") });
