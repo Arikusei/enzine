@@ -352,85 +352,226 @@ body {
   display: none;
 }
 
-/* Hero slider */
+/* Hero slider — large season banner */
 .hero {
   padding: 0;
+  overflow: visible;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.hero__viewport {
+  touch-action: pan-y;
+}
+
+.hero__banner {
+  position: relative;
+  min-height: 240px;
+  padding: 1.5rem 1.25rem 1.75rem;
+  border: 3px solid var(--border);
+  box-shadow: var(--shadow);
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
 }
 
-.hero__slide {
-  padding: 1.25rem 1rem;
-  min-height: 140px;
-  border-bottom: 3px solid var(--border);
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 11, 18, 0.15) 0%,
+    rgba(11, 11, 18, 0.75) 100%
+  );
 }
 
-.hero__slide--cyan {
-  background: linear-gradient(135deg, #0b0b12 0%, #0a2a2a 100%);
+.hero__banner--gradient.hero__banner--target-phase {
+  background-color: #0b0b12;
+  background-image: linear-gradient(145deg, #0a2830 0%, #0b0b12 45%, #1a0830 100%);
 }
 
-.hero__slide--magenta {
-  background: linear-gradient(135deg, #0b0b12 0%, #2a0a22 100%);
+.hero__banner--gradient.hero__banner--target-drop {
+  background-color: #0b0b12;
+  background-image: linear-gradient(145deg, #2a0a28 0%, #0b0b12 50%, #0a1a2a 100%);
 }
 
-.hero__slide--yellow {
-  background: linear-gradient(135deg, #0b0b12 0%, #2a220a 100%);
+.hero__banner--gradient.hero__banner--target-irl {
+  background-color: #0b0b12;
+  background-image: linear-gradient(145deg, #2a2208 0%, #0b0b12 45%, #0a2a1a 100%);
 }
 
-.hero__tag {
+.hero__banner--gradient.hero__banner--target-zine {
+  background-color: #0b0b12;
+  background-image: linear-gradient(145deg, #1a0a2a 0%, #0b0b12 55%, #2a1008 100%);
+}
+
+.hero__banner--noise {
+  background-color: #12121c;
+}
+
+.hero__banner--noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+.hero__banner--noise.hero__banner--target-drop {
+  box-shadow: 4px 4px 0 var(--magenta);
+}
+
+.hero__banner--noise.hero__banner--target-zine {
+  box-shadow: 4px 4px 0 var(--yellow);
+}
+
+.hero__banner--image .hero__overlay {
+  background: linear-gradient(180deg, rgba(11, 11, 18, 0.2) 0%, rgba(11, 11, 18, 0.85) 100%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 200px;
+  justify-content: flex-end;
+}
+
+.hero__label {
   display: inline-block;
   font-size: 0.6rem;
   font-weight: 900;
-  letter-spacing: 0.18em;
-  padding: 0.2rem 0.45rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
   border: 2px solid currentColor;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
-.hero__slide--cyan .hero__tag {
+.hero__label--phase {
   color: var(--cyan);
+  box-shadow: 2px 2px 0 var(--cyan);
 }
 
-.hero__slide--magenta .hero__tag {
+.hero__label--drop {
+  color: var(--magenta);
+  box-shadow: 2px 2px 0 var(--magenta);
+}
+
+.hero__label--irl {
+  color: var(--yellow);
+  box-shadow: 2px 2px 0 var(--yellow);
+}
+
+.hero__label--zine {
+  color: var(--text);
+  border-color: var(--magenta);
   color: var(--magenta);
 }
 
-.hero__slide--yellow .hero__tag {
-  color: var(--yellow);
-}
-
 .hero__title {
-  font-size: 1.25rem;
+  font-size: clamp(1.5rem, 6vw, 1.85rem);
   font-weight: 900;
+  line-height: 1.05;
   text-transform: uppercase;
-  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  max-width: 14ch;
 }
 
 .hero__subtitle {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
   color: var(--text-muted);
-  max-width: 28ch;
+  max-width: 32ch;
+  margin-bottom: 1.1rem;
 }
 
-.hero__dots {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  min-height: 44px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--cyan);
+  border: 3px solid var(--border);
+  box-shadow: 3px 3px 0 var(--border);
+  cursor: pointer;
 }
 
-.hero__dot {
-  width: 10px;
-  height: 10px;
-  border: 2px solid var(--border);
+.hero__cta:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.hero__banner--target-drop .hero__cta {
+  background: var(--magenta);
+}
+
+.hero__banner--target-irl .hero__cta {
+  background: var(--yellow);
+  color: var(--bg);
+}
+
+.hero__banner--target-zine .hero__cta {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.hero__nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28%;
+  z-index: 2;
+  border: none;
   background: transparent;
   cursor: pointer;
   padding: 0;
 }
 
+.hero__nav--prev {
+  left: 0;
+}
+
+.hero__nav--next {
+  right: 0;
+}
+
+.hero__dots {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.85rem 0 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero__dot {
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
 .hero__dot--active {
+  width: 22px;
   background: var(--cyan);
   border-color: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
+  box-shadow: 0 0 10px rgba(0, 255, 240, 0.45);
 }
 
 /* Season stats */

@@ -12,12 +12,18 @@ export interface HomeSeason {
   nextAccessProgress: number;
 }
 
+export type HeroSlideBackgroundType = "image" | "gradient" | "noise";
+export type HeroSlideTargetType = "phase" | "drop" | "zine" | "irl";
+
 export interface HeroSlide {
   id: string;
-  tag: string;
   title: string;
   subtitle: string;
-  accent: "cyan" | "magenta" | "yellow";
+  label: string;
+  ctaText: string;
+  backgroundType: HeroSlideBackgroundType;
+  imageUrl?: string;
+  targetType: HeroSlideTargetType;
 }
 
 export interface Reward {
