@@ -60,6 +60,7 @@ Bot и Mini App читают переменные из корневого `.env`
 - [Sprint 1 Architecture](docs/sprint-1-architecture.md)
 - [Проверка task для работодателя](docs/employer-verification.md)
 - [Bot 24/7 (деплой)](docs/deploy-bot-24-7.md)
+- [Oracle Cloud с нуля (пошагово)](docs/deploy-oracle-from-scratch.md)
 - [Сценарии](docs/scenarios.md)
 - [Быстрый старт](docs/getting-started.md)
 - [База данных](database/README.md)
