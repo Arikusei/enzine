@@ -1,3 +1,6 @@
+-- DEPRECATED: legacy seed for 001_init.sql (BIGINT users schema).
+-- Use 002_seasonal_demo.sql after applying 002_seasonal_model.sql.
+
 -- Demo seed data (telegram_id is fictional)
 INSERT INTO users (telegram_id, username, first_name, last_name, role)
 VALUES
