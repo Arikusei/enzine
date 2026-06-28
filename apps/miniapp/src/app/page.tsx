@@ -13,11 +13,20 @@ import {
   IrlSection,
 } from "@/components/sections";
 import { getHomePageData } from "@/data/mock/home";
-import type { HomePageData } from "@/types/home";
+import type { HeaderUser, HomePageData } from "@/types/home";
+
+function mergeTelegramUser(mockUser: HeaderUser, tgUser: User | null): HeaderUser {
+  if (!tgUser) return mockUser;
+  return {
+    ...mockUser,
+    name: formatUserName(tgUser),
+    city: mockUser.city,
+  };
+}
 
 export default function HomePage() {
   const [data, setData] = useState<HomePageData | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [tgUser, setTgUser] = useState<User | null>(null);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
@@ -27,7 +36,7 @@ export default function HomePage() {
 
       const initUser = tg.initDataUnsafe?.user;
       if (initUser) {
-        setUser({
+        setTgUser({
           telegramId: initUser.id,
           username: initUser.username,
           firstName: initUser.first_name,
@@ -53,11 +62,11 @@ export default function HomePage() {
     );
   }
 
-  const displayName = user ? formatUserName(user) : data.userName;
+  const user = mergeTelegramUser(data.user, tgUser);
 
   return (
     <MiniAppShell>
-      <Header title={data.season.title} city={data.season.city} userName={displayName} />
+      <Header user={user} notifications={data.notifications} />
       <HeroSlider slides={data.heroSlides} />
       <SeasonStats season={data.season} />
       <RewardsSection rewards={data.rewards} userPoints={data.season.points} />

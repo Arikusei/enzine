@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+  <rect width="80" height="80" fill="#12121c"/>
+  <rect x="4" y="4" width="72" height="72" stroke="#00fff0" stroke-width="3"/>
+  <circle cx="40" cy="32" r="14" fill="#ff2bd6"/>
+  <path d="M16 68c4-14 16-22 24-22s20 8 24 22" fill="#ffe600"/>
+  <text x="40" y="76" text-anchor="middle" fill="#00fff0" font-family="sans-serif" font-size="8" font-weight="bold">ENZINE</text>
+</svg>

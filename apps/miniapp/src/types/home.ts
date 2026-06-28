@@ -1,3 +1,9 @@
+export interface HeaderUser {
+  name: string;
+  avatarUrl: string;
+  city: string;
+}
+
 export interface HomeSeason {
   title: string;
   city: string;
@@ -43,12 +49,21 @@ export interface IrlEvent {
   spotsLeft: number;
 }
 
+export interface NotificationItem {
+  id: string;
+  title: string;
+  body: string;
+  time: string;
+  read: boolean;
+}
+
 export interface HomePageData {
+  user: HeaderUser;
   season: HomeSeason;
-  userName?: string;
   heroSlides: HeroSlide[];
   rewards: Reward[];
   tasks: Task[];
   zineItems: ZineItem[];
   irlEvents: IrlEvent[];
+  notifications: NotificationItem[];
 }

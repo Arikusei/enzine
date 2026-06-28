@@ -2,6 +2,11 @@ import type { HomePageData } from "@/types/home";
 
 /** Mock data — replace with API fetch (e.g. getHomePageData) in production */
 export const homePageMock: HomePageData = {
+  user: {
+    name: "Илья",
+    avatarUrl: "/mock/avatar.svg",
+    city: "Томск",
+  },
   season: {
     title: "Enzine Pilot",
     city: "Томск",
@@ -9,7 +14,29 @@ export const homePageMock: HomePageData = {
     points: 2620,
     nextAccessProgress: 68,
   },
-  userName: "Участник",
+  notifications: [
+    {
+      id: "n1",
+      title: "Фаза 1 открыта",
+      body: "Новые задачи доступны в сезоне Enzine Pilot.",
+      time: "2 мин назад",
+      read: false,
+    },
+    {
+      id: "n2",
+      title: "IRL Meetup",
+      body: "Осталось 14 мест на встречу 12 июля.",
+      time: "1 ч назад",
+      read: false,
+    },
+    {
+      id: "n3",
+      title: "Zine #01",
+      body: "Вышел новый выпуск — «Город как интерфейс».",
+      time: "вчера",
+      read: true,
+    },
+  ],
   heroSlides: [
     {
       id: "slide-1",
