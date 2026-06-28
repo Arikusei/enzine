@@ -1,0 +1,20 @@
+---
+description: Commit and push to GitHub after completing work by default
+alwaysApply: true
+---
+
+# Auto commit and push
+
+After completing a task with file changes in this repository:
+
+1. **Commit and push automatically** — do not ask for confirmation unless the user explicitly says not to commit.
+2. Follow the git safety protocol (no force push, no git config changes, no secrets in commits).
+3. Stage only files related to the task; exclude unrelated local noise (e.g. line-ending-only diffs).
+4. Write a concise commit message focused on **why**, in the repo's existing style.
+5. Push to `origin` on the current branch after a successful commit.
+6. Report the commit hash and GitHub link in the final response.
+
+Skip commit/push only when:
+- The user explicitly asks not to commit
+- There are no changes to commit
+- The commit hook failed (fix and create a new commit, do not amend unless allowed)
