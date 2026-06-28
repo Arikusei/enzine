@@ -1,98 +1,70 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ActionType, formatUserName, type User } from "@enzine/shared";
+import { MiniAppShell } from "@/components/shell";
 import {
-  ActionType,
-  NodeType,
-  SeasonStatus,
-  UserState,
-  formatUserName,
-  type Season,
-  type User,
-  type UserStateRecord,
-} from "@enzine/shared";
-
-const demoSeason: Season = {
-  id: "f0040003-0000-4000-8000-000000000001",
-  slug: "test-season",
-  title: "Тестовый сезон",
-  status: SeasonStatus.Active,
-};
-
-const demoUserState: UserStateRecord = {
-  id: "f0040006-0000-4000-8000-000000000001",
-  userId: "f0040001-0000-4000-8000-000000000001",
-  seasonId: demoSeason.id,
-  currentPhaseId: "f0040004-0000-4000-8000-000000000001",
-  state: UserState.Phase1Available,
-  updatedAt: new Date().toISOString(),
-};
-
-const demoNodes: { type: NodeType; title: string }[] = [
-  { type: NodeType.Message, title: "Добро пожаловать" },
-  { type: NodeType.Form, title: "Контактные данные" },
-  { type: NodeType.Webapp, title: "Mini App" },
-];
+  Header,
+  HeroSlider,
+  SeasonStats,
+  RewardsSection,
+  TasksSection,
+  ZineSection,
+  IrlSection,
+} from "@/components/sections";
+import { getHomePageData } from "@/data/mock/home";
+import type { HomePageData } from "@/types/home";
 
 export default function HomePage() {
+  const [data, setData] = useState<HomePageData | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [userState] = useState<UserStateRecord>(demoUserState);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (!tg) return;
+    if (tg) {
+      tg.ready();
+      tg.expand();
 
-    tg.ready();
-    tg.expand();
-
-    const initUser = tg.initDataUnsafe?.user;
-    if (initUser) {
-      setUser({
-        telegramId: initUser.id,
-        username: initUser.username,
-        firstName: initUser.first_name,
-        lastName: initUser.last_name,
-      });
+      const initUser = tg.initDataUnsafe?.user;
+      if (initUser) {
+        setUser({
+          telegramId: initUser.id,
+          username: initUser.username,
+          firstName: initUser.first_name,
+          lastName: initUser.last_name,
+        });
+      }
     }
 
-    console.log(ActionType.PhaseViewed, {
-      seasonId: demoSeason.id,
-      state: userState.state,
-    });
-  }, [userState.state]);
+    getHomePageData().then(setData);
+  }, []);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  useEffect(() => {
+    if (data) {
+      console.log(ActionType.PhaseViewed, { season: data.season.title });
+    }
+  }, [data]);
+
+  if (!data) {
+    return (
+      <MiniAppShell>
+        <div className="loading">Загрузка…</div>
+      </MiniAppShell>
+    );
+  }
+
+  const displayName = user ? formatUserName(user) : data.userName;
 
   return (
-    <main className="page">
-      <h1>Enzine</h1>
-      <p>Next.js Telegram Mini App</p>
-
-      {user && <p className="greeting">Привет, {formatUserName(user)}!</p>}
-
-      <section className="card">
-        <h2>{demoSeason.title}</h2>
-        <p>
-          Статус сезона: <strong>{demoSeason.status}</strong>
-        </p>
-        <p>
-          Ваше состояние: <strong>{userState.state}</strong>
-        </p>
-      </section>
-
-      <section className="card">
-        <h3>Узлы фазы</h3>
-        <ul>
-          {demoNodes.map((node) => (
-            <li key={node.title}>
-              [{node.type}] {node.title}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {apiUrl && <p className="hint">API: {apiUrl}</p>}
-    </main>
+    <MiniAppShell>
+      <Header title={data.season.title} city={data.season.city} userName={displayName} />
+      <HeroSlider slides={data.heroSlides} />
+      <SeasonStats season={data.season} />
+      <RewardsSection rewards={data.rewards} userPoints={data.season.points} />
+      <TasksSection tasks={data.tasks} />
+      <ZineSection items={data.zineItems} />
+      <IrlSection events={data.irlEvents} />
+    </MiniAppShell>
   );
 }
 
