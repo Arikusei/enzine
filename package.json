@@ -12,7 +12,10 @@
     "dev:miniapp": "npm run dev -w @enzine/miniapp",
     "build": "npm run build -w @enzine/shared && npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "postinstall": "npm run build -w @enzine/shared"
+    "postinstall": "npm run build -w @enzine/shared",
+    "db:migrate": "psql \"%DATABASE_URL%\" -f database/migrations/001_init.sql && psql \"%DATABASE_URL%\" -f database/migrations/002_seasonal_model.sql",
+    "db:seed": "psql \"%DATABASE_URL%\" -f database/seeds/004_test_season.sql",
+    "db:seed:verify": "psql \"%DATABASE_URL%\" -f database/seeds/004_test_season_verify.sql"
   },
   "engines": {
     "node": ">=20"

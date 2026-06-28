@@ -10,8 +10,10 @@ database/
 │   ├── 001_init.sql           # legacy scaffold (заменяется в 002)
 │   └── 002_seasonal_model.sql # сезонная модель (основная схема)
 └── seeds/
-    ├── 001_users.sql          # legacy (не использовать после 002)
-    └── 002_seasonal_demo.sql  # демо-данные сезонной модели
+    ├── 001_users.sql                  # legacy (не использовать после 002)
+    ├── 002_seasonal_demo.sql          # ранний демо-сид
+    ├── 004_test_season.sql            # TASK-04: тестовый сезон (основной)
+    └── 004_test_season_verify.sql     # проверка после seed
 ```
 
 ## Сезонная модель
@@ -40,7 +42,27 @@ psql $DATABASE_URL -f database/migrations/001_init.sql
 psql $DATABASE_URL -f database/migrations/002_seasonal_model.sql
 
 # Сиды
-psql $DATABASE_URL -f database/seeds/002_seasonal_demo.sql
+psql $DATABASE_URL -f database/seeds/004_test_season.sql
+
+# или через npm (требует psql в PATH)
+npm run db:seed
+npm run db:seed:verify
+```
+
+## TASK-04: тестовый сезон
+
+| Сущность | Значение |
+|----------|----------|
+| Season slug | `test-season` |
+| Telegram users | `@test_user` (999001), `@test_admin` (999002) |
+| Phases | `welcome` → `main` → `finish` |
+| Nodes | 6 (message, form, webapp, quiz) |
+| Events | «Тестовый воркшоп», «Тестовый митап» |
+| CRM outbox | `bitrix24.lead.create` (pending) |
+
+```bash
+npm run db:seed
+npm run db:seed:verify
 ```
 
 ## Проверка схемы
