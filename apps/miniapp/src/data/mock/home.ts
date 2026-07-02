@@ -14,6 +14,12 @@ export const homePageMock: HomePageData = {
     points: 2620,
     nextAccessProgress: 68,
   },
+  stats: {
+    points: 2620,
+    progressTitle: "До следующего доступа",
+    progressValue: "68%",
+    progressDescription: "Заверши фазу, чтобы открыть дроп",
+  },
   notifications: [
     {
       id: "n1",

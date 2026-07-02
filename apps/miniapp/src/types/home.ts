@@ -12,6 +12,13 @@ export interface HomeSeason {
   nextAccessProgress: number;
 }
 
+export interface SeasonStatsData {
+  points: number;
+  progressTitle: string;
+  progressValue: string;
+  progressDescription: string;
+}
+
 export type HeroSlideBackgroundType = "image" | "gradient" | "noise";
 export type HeroSlideTargetType = "phase" | "drop" | "zine" | "irl";
 
@@ -66,6 +73,7 @@ export interface NotificationItem {
 export interface HomePageData {
   user: HeaderUser;
   season: HomeSeason;
+  stats: SeasonStatsData;
   heroSlides: HeroSlide[];
   rewards: Reward[];
   tasks: Task[];

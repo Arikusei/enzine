@@ -579,58 +579,57 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
-  margin-bottom: 1rem;
 }
 
-.stats__item {
-  border: 2px solid var(--border);
-  padding: 0.65rem 0.75rem;
+.stats__card {
+  min-height: 126px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.stats__item--accent {
-  border-color: var(--yellow);
-  box-shadow: 2px 2px 0 var(--yellow);
+.stats__card--balance {
+  border-color: var(--cyan);
+  box-shadow: 3px 3px 0 var(--cyan);
+}
+
+.stats__card--progress {
+  border-color: var(--magenta);
+  box-shadow: 3px 3px 0 var(--magenta);
 }
 
 .stats__label {
   display: block;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .stats__value {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 900;
+  line-height: 1.05;
 }
 
-.stats__progress-head {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  color: var(--text-muted);
+.stats__value--balance {
+  font-size: clamp(1.55rem, 7vw, 1.95rem);
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(0, 255, 240, 0.2);
 }
 
-.stats__progress-pct {
+.stats__value--progress {
+  font-size: clamp(1.35rem, 6vw, 1.65rem);
   color: var(--magenta);
-  font-weight: 800;
 }
 
-.stats__progress-bar {
-  height: 12px;
-  border: 2px solid var(--border);
-  background: var(--bg);
-}
-
-.stats__progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--magenta), var(--cyan));
-  transition: width 0.3s ease;
+.stats__hint {
+  margin-top: auto;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted);
 }
 
 /* Rewards */

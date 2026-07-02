@@ -68,7 +68,7 @@ export default function HomePage() {
     <MiniAppShell>
       <Header user={user} notifications={data.notifications} />
       <HeroSlider slides={data.heroSlides} />
-      <SeasonStats season={data.season} />
+      <SeasonStats stats={data.stats} />
       <RewardsSection rewards={data.rewards} userPoints={data.season.points} />
       <TasksSection tasks={data.tasks} />
       <ZineSection items={data.zineItems} />
