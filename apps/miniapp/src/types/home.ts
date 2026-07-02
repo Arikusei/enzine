@@ -36,8 +36,10 @@ export interface HeroSlide {
 export interface Reward {
   id: string;
   title: string;
+  category: string;
   cost: number;
   status: "available" | "locked" | "claimed";
+  imageUrl?: string;
 }
 
 export interface Task {
